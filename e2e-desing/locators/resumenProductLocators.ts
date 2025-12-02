@@ -18,8 +18,8 @@ export class ResumenProductLocators {
         return this.page.getByLabel(this.productName);
     }
 
-    async clickOnProduct() {
-        return this.page.getByRole('link', { name: this.productName, exact: true }).click();
+    get onProductLink() {
+        return this.page.getByRole('link', { name: this.productName, exact: true });
     }
 
 }
