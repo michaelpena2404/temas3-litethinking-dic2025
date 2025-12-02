@@ -10,11 +10,12 @@ export class AmazonActions {
         this.page = page;
     }
 
-    async searchProduct(productName: string) {
-        const searchPage = new SearchPageLocators(this.page);
-        await searchPage.searchBox.click();
-        await searchPage.searchBox.fill(productName);
-        await searchPage.goButtonSearch.click();
+    async doEnterText(text: string, locator: Locator) {
+        await locator.fill(text);
+    }
+
+    async doClick(locator: Locator) {
+        await locator.click();
     }
 
     async goToAmazonHomePage() {
