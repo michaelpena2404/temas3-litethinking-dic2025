@@ -13,6 +13,7 @@ export class LoginPage extends BasePage {
     private readonly loginButton = '[data-test="login-button"]';
     private readonly headerTitle = '[data-test="title"]';
     private readonly primaryHeader = '[data-test="primary-header"]';
+    private readonly errorMessage = '[data-test="error"]';
 
     constructor(page: Page, baseUrl: string) {
         super(page, baseUrl);
@@ -28,4 +29,16 @@ export class LoginPage extends BasePage {
         await expect(this.page.locator(this.headerTitle)).toContainText('Products');
         await expect(this.page.locator(this.primaryHeader)).toContainText('Swag Labs');
     }
+
+    async verifyloginFailure(errorMessage: string): Promise<void> {
+        await expect(this.page.locator(this.errorMessage)).toBeVisible();
+        await expect(this.page.locator(this.errorMessage)).toContainText(errorMessage);
+    }
+
+    async verifyLoginPage(): Promise<void> {
+        await expect(this.page.locator(this.loginButton)).toBeVisible();
+        await expect(this.page.locator(this.usernameInput)).toBeVisible();
+        await expect(this.page.locator(this.passwordInput)).toBeVisible();
+    }
 }
+
