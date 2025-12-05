@@ -1,4 +1,4 @@
-import { Given, When, Then, Before } from '@cucumber/cucumber';
+import { Given, When, Then, Before, After } from '@cucumber/cucumber';
 import { Actor } from '../../../../e2e-screenplay/actors/Actor';
 import { OpenApp, Login } from '../../../../e2e-screenplay/tasks/Tasks';
 import { Ensure } from '../../../../e2e-screenplay/questions/Questions';
@@ -19,6 +19,10 @@ Before(async function (){
     page =  await context.newPage();
 });
 
+After (async function (){
+    await browaser.close();
+});
+
 Given('que Michael esta en la pagina de inicio de sesion', async function () {
     actor = Actor.named('Michael', page);
     await actor.attemptsTo(
@@ -35,4 +39,9 @@ When('inicia sesipn con usuario {string} y contrasena {string}', async function 
 Then('deberia ver la pagina de productos', async function (){
     const isProductsVisible = await Ensure.that(page).containsText('Products', LoginUi.LOGIN_PAGE.HEADER_TITLE);
     expect(isProductsVisible).toBeTruthy();
+});
+
+Then('deberia ver el mensaje de error {string}', async function (errorMessage: string){
+    const isErrorVisible = await Ensure.that(page).containsText(errorMessage, LoginUi.LOGIN_PAGE.ERROR_MESSAGE);
+    expect(isErrorVisible).toBeTruthy();
 });

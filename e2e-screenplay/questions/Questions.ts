@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
 export class Text {
     static async from(page: Page, selector: string): Promise<string> {
