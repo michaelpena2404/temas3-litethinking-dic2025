@@ -10,17 +10,17 @@ test.beforeEach(async ({ page }) => {
     await loginPage.navigateTo();
 });
 
-test('test succes with POM', async ({ page }) => {
+test('test Succes with POM', async ({ page }) => {
     await loginPage.login(testConfig.credentials.standdardUser);
     await loginPage.verifyloginSuccess();
 });
 
-test('test user locked out', async ({ page }) => {
+test('test User locked out', async ({ page }) => {
     await loginPage.login(testConfig.credentials.lockedUser);
     await loginPage.verifyloginFailure(testConfig.errorMessages.lockedUserError);
 });
 
-test('test login and logout', async ({ page }) => {
+test('test Login and logout', async ({ page }) => {
     let inventoryPage = new InventoryPage(page);
     await loginPage.login(testConfig.credentials.standdardUser);
     await inventoryPage.clickLogout();
