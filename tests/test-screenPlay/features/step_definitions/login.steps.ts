@@ -12,7 +12,6 @@ let browaser: any;
 
 Before(async function (){
     browaser = await chromium.launch({
-        headless: false,
         slowMo: 1000
     });
     const context = await browaser.newContext();
