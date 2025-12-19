@@ -66,3 +66,56 @@ test('Get Pokemon moves sorted alphabetically', async ({ request }) => {
     expect(Array.isArray(moveNames)).toBeTruthy();
     expect(moveNames).toEqual([...moveNames].sort());
 });
+
+test('Get Bulbasaur evolution chain from PokeAPI', async ({ request }) => {
+  const pokemonName = 'bulbasaur';
+  // 1️⃣ Obtener los datos base del Pokémon
+  const pokemonResponse = await request.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+  expect(pokemonResponse.status()).toBe(200);
+
+  const pokemonData = await pokemonResponse.json();
+  expect(pokemonData.name).toBe(pokemonName);
+  console.log('=== Pokémon Data ===');
+  console.log(pokemonData.name);
+
+  // 2️⃣ Obtener la URL del species
+  const speciesUrl = pokemonData.species.url;
+  console.log('Species URL:', speciesUrl);
+
+  const speciesResponse = await request.get(speciesUrl);
+  expect(speciesResponse.status()).toBe(200);
+
+  const speciesData = await speciesResponse.json();
+  const evolutionChainUrl = speciesData.evolution_chain.url;
+  console.log('Evolution Chain URL:', evolutionChainUrl);
+
+  // 3️⃣ Obtener la cadena de evolución
+  const evolutionResponse = await request.get(evolutionChainUrl);
+  expect(evolutionResponse.status()).toBe(200);
+
+  const evolutionData = await evolutionResponse.json();
+  const chain = evolutionData.chain;
+
+  // 4️⃣ Recorrer las evoluciones
+  const evolutions: string[] = [];
+
+  // Primera evolución
+  evolutions.push(chain.species.name);
+
+  // Segunda evolución (si existe)
+  if (chain.evolves_to.length > 0) {
+    evolutions.push(chain.evolves_to[0].species.name);
+
+    // Tercera evolución (si existe)
+    if (chain.evolves_to[0].evolves_to.length > 0) {
+      evolutions.push(chain.evolves_to[0].evolves_to[0].species.name);
+    }
+  }
+
+  console.log('=== Evoluciones de Bulbasaur ===');
+  evolutions.forEach(name => console.log(name));
+
+  // 5️⃣ Validaciones
+  expect(evolutions.length).toBeGreaterThan(0);
+  expect(evolutions).toEqual(['bulbasaur', 'ivysaur', 'venusaur']);
+});
